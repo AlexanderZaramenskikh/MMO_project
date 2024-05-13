@@ -1,0 +1,15 @@
+{% extends 'main/layout.html' %}{% load static %}
+{% load i18n %}
+
+{% block title %} Create a new post {% endblock title %}
+
+{% block content %}
+<div class="features">
+    <h1> {{string}} {% trans "Новый пост от " %}  "{{ user }}"</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add/edit post">
+    </form>
+</div>
+{% endblock content %}

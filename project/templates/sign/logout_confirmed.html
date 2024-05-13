@@ -1,0 +1,9 @@
+{% extends "main/layout.html" %}
+{% load i18n %}
+{% block content %}
+<h1> {{string}} {% trans "Вы действительно хотите выйти?" %} </h1>
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value= {{string}} {% trans "Подтвердить"%}>
+</form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'main/layout.html' %}{% load static %}
+{% load i18n %}
+
+{% block title %} The Post of {{post.author}} {% endblock title %}
+
+{% block content %}
+
+
+<div class="features">
+
+    <h1>{{ string }} {% trans "Просмотр публикации:" %}</h1>
+    <h2> {{ string }} {% trans "Автор:" %} "{{post.author}} " </h2>
+    <h2>{{ string }} {% trans "дата и время поста:" %} {{post.post_time}}<br>
+        <br>{{ string }} {% trans "Заголовок:" %} "{{ post.title }}"</h2><br>
+
+    <h3>{{ string }} {% trans "Содержание: " %} {{ post.text }}</h3>
+    <h3>{{post.file}}</h3>
+    <hr>
+    <br>
+    <h3 align="center"><a href="{% url 'update' post.id %}"><u> {{ string }} {% trans "Редактировать" %}
+        &#128260;</u></a></h3>
+    <h3 align="center"><a href="{% url 'delete' post.id %}"><u> {{ string }} {% trans "Удалить" %} &#128683; </u></a>
+    </h3>
+
+</div>
+{% endblock content %}

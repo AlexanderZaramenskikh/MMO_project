@@ -1,0 +1,33 @@
+{% extends 'main/layout.html' %}
+{% load i18n %} {% load static %}
+{% block title %} Delete chosen post {% endblock title %}
+
+{% block content %}
+<div class="features">
+<h1>{{ string }} {% trans "Вы действительно хотите удалить этот пост?" %}</h1>
+
+<table>
+    <div class="table">
+    <tr >
+        <th> {{ string }} {% trans "Автор:" %}</th>
+        <th> {{ string }} {% trans "Заголовок:" %}</th>
+        <th> {{ string }} {% trans "Краткое содержание:" %}</th>
+        <th> {{ string }} {% trans "Дата публикации:" %}</th>
+        <th> {{ string }} {% trans "Категория:" %}</th>
+    </tr>
+
+    <tr>
+        <td width="200">{{post.author}}</td>
+        <td width="300">{{post.title}}</td>
+        <td width="400">{{post.text|truncatewords:20}}</td>
+        <td width="200">{{post.post_time}}</td>
+        <td width="200">{{post.category}}</td>
+    </tr>
+    </div>
+</table>
+
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Confirm"></form>
+{% endblock content %}

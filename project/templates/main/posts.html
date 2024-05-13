@@ -1,0 +1,76 @@
+{% extends 'main/layout.html' %}
+{% load i18n %}
+{% load static  %}
+{% block title %} Posts {% endblock  %}
+
+<b style="color:#ff0099; font-size:30px"> Page "Posts"</b>
+
+{% block text %} {{text}} {% endblock  %}
+
+{% block content %}
+
+<div class="features">
+    <h1>{{ string }} {% trans "Главная страница" %}</h1>
+
+    <h3>
+        {{ string }} {% trans "На сегодняшнее число," %} {{ time_now|date:'d M Y' }},
+        {{ string }} {% trans " всего объявлений: " %} {{ posts_quantity }},
+        {{ string }} {% trans "из них, на этой странице показано: " %} {{posts|length}}.
+    </h3>
+
+<hr>
+{% if posts %}
+<table>
+    <thead>
+    <tr align="left">
+        <th> {{ string }} {% trans "Автор:" %}</th>
+        <th> {{ string }} {% trans "Заголовок:" %}</th>
+        <th> {{ string }} {% trans "Краткое содержание:" %}</th>
+        <th> {{ string }} {% trans "Дата публикации:" %}</th>
+        <th> {{ string }} {% trans "Категория:" %}</th>
+        <th> {{ string }} {% trans "Ред-ть:" %}</th>
+        <th> {{ string }} {% trans "Удалить:" %}</th>
+
+    </tr>
+    </thead>
+        {% for item in posts %}
+            <tr>
+                <td width="100">{{ item.author }}</td>
+               {# <td width="200">{{ item.title }}</td>#}
+               <td width="200"><a href="{% url 'post' item.id %}">{{ item.title }}</a></td>
+                <td width="400">{{item.text}}</td>
+                <td width="200">{{item.post_time}}</td>
+                <td width="200">{{item.category}}</td>
+                <td width="100"><a href="{% url 'update' item.id %}"><u>&#128260;</u></a></td>
+                <td width="100"><a href="{% url 'delete' item.id %}"><u> &#128683; </u></a></td>
+            </tr>
+        {% endfor %}
+    <h5>{{ string }} {% trans "Вы можете оставить комментарии на пост, кликнув по нему" %} </h5>
+
+</table>
+{% else %}
+    <h2>{{ string }} {% trans "Сегодня без новостей" %} &#129335;</h2>
+{% endif %}
+<br>
+{% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">&#9194;</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a>{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"> &#9193;</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+{% endif %}
+</div>
+{% endblock %}

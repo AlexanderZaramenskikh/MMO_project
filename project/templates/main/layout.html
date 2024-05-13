@@ -1,0 +1,68 @@
+{% load i18n %}
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> {% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <script src="https://kit.fontawesome.com/a6cac56110.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<aside>
+    {% csrf_token %} <!-- Не забываем по csrf_token для POST запросов -->
+    <html lang="en" xmlns="http://www.w3.org/1999/html">
+    <span class="logo"></span>
+    <h3>{{ string }} {% trans 'Навигация' %}</h3>
+    <ul>
+        <a href="{% url 'home' %}">
+            <li><i class="fa-solid fa-house"></i> {{ string }} {% trans 'Главная' %}</li>
+        </a>
+
+        <a href="{% url 'create' %}">
+            <li><i class="fa-regular fa-newspaper"></i> {{ string }} {% trans 'Разместить пост' %}</li>
+        </a>
+        <br>
+
+        <br><br><br><br><br>
+
+        {% if not user.is_authenticated %}
+        <br>
+        <p>{%trans 'Для полноценного присутствия требуется авторизация или регистрация'%}</p>
+        <a href="{% url 'account_login' %}">
+            <li><i class="fa-solid fa-right-to-bracket"></i> {{ string }} {%trans 'Вход'%}</li>
+        </a>
+        <a href="{% url 'account_signup' %}">
+            <li><i class="fa-solid fa-right-to-bracket"></i> {{ string }} {%trans 'Регистрация'%}</li>
+        </a>
+        {% else %}
+        <br>
+        <p>{{ string }} {% trans "Вы авторизированы как" %}</p>
+        <p>"{{ user }}"</p>
+        <a href="{% url 'logout_confirmed' %}">
+            <li><i class="fa-solid fa-right-from-bracket"></i>{{ string }} {%trans 'Выход'%}</li>
+        </a>
+        {% endif %}
+    </ul>
+    </html>
+
+</aside>
+<main align='center'>
+
+    <br>
+
+
+    {% block text %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+</main>
+
+</body>
