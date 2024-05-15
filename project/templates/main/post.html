@@ -14,7 +14,7 @@
         <br>{{ string }} {% trans "Заголовок:" %} "{{ post.title }}"</h2><br>
 
     <h3>{{ string }} {% trans "Содержание: " %} {{ post.text }}</h3>
-    <h3>{{post.file}}</h3>
+    <h3>{{post.file|safe}}</h3>
     <hr>
     <br>
     <h3 align="center"><a href="{% url 'update' post.id %}"><u> {{ string }} {% trans "Редактировать" %}

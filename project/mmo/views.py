@@ -7,17 +7,10 @@ from django.utils.translation import get_language as lg
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView
 
-from .forms import PostForm
-from .models import Post
+from .forms import PostForm,CommentForm
+from .models import Post,Comment
 
 
-# def MainView(request):
-#     data = {
-#         'page': 'Главная страница',
-#         'title': 'Заглавие главной страницы',
-#         'text': 'Наполнение главной страницы главной страницы главной страницыглавной страницыглавной страницыглавной страницы',
-#     }
-#     return render(request, 'main/posts.html', data)
 class MainView(ListView):
     model = Post
     ordering = '-post_time'
@@ -51,11 +44,9 @@ class PostView(ListView):
         return context
 
 
-class PostCreateView(PermissionRequiredMixin, CreateView):
+class PostCreateView(CreateView):
     form_class = PostForm
     model = Post
-    permission_required = ('main.add_post',
-                           'main.change_post')
     context_object_name = 'posts_today'
     template_name = 'main/create.html'
     success_url = '/'
@@ -73,27 +64,18 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
         return context
 
 
-class PostUpdateView(PermissionRequiredMixin, UpdateView):
-    permission_required = ('main.change_post')
+class PostUpdateView(UpdateView):
     form_class = PostForm
     template_name = 'main/create.html'
     success_url = '/'
 
-    #
-    # data = {
-    #     'title': 'Измените содержание статьи',
-    #     'text': 'fsdfgsdfgsdfg'
-    # }
-    # success_url = '/'
 
-    # получить информацию об объекте, который мы собираемся редактировать
     def get_object(self, **kwargs):
         _id = self.kwargs.get('pk')
         return Post.objects.get(pk=_id)
 
 
-class PostDeleteView(PermissionRequiredMixin, DeleteView):
-    permission_required = ('main.delete_post')
+class PostDeleteView(DeleteView):
     template_name = 'main/delete.html'
     queryset = Post.objects.all()
     success_url = '/'
@@ -119,3 +101,10 @@ def Language(cur_language):
         return 'about_ru.txt'
     else:
         return 'about_en.txt'
+
+class CommentView(CreateView):
+    form_class = CommentForm
+    model = Comment
+    context_object_name = 'comment'
+    template_name = 'main/comment.html'
+    success_url = '/'

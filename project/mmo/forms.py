@@ -1,5 +1,5 @@
 from django.forms import ModelForm, BooleanField  # true-false поле
-from .models import Post
+from .models import Post,Comment
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 class PostForm(ModelForm):
@@ -11,3 +11,8 @@ class PostForm(ModelForm):
         }
         fields = ['title', 'text', 'category', 'check_box', 'file']
         exclude = ["post_time", "author"]
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text', 'post', 'user']

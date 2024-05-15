@@ -30,6 +30,7 @@
         <th> {{ string }} {% trans "Категория:" %}</th>
         <th> {{ string }} {% trans "Ред-ть:" %}</th>
         <th> {{ string }} {% trans "Удалить:" %}</th>
+        <th> {{ string }} {% trans "Оставить отклик:" %}</th>
 
     </tr>
     </thead>
@@ -43,9 +44,10 @@
                 <td width="200">{{item.category}}</td>
                 <td width="100"><a href="{% url 'update' item.id %}"><u>&#128260;</u></a></td>
                 <td width="100"><a href="{% url 'delete' item.id %}"><u> &#128683; </u></a></td>
+                <td width="100"><a href="{% url 'comment' item.id %}"><u> &#128681; </u></a></td>
             </tr>
         {% endfor %}
-    <h5>{{ string }} {% trans "Вы можете оставить комментарии на пост, кликнув по нему" %} </h5>
+    <h5>{{ string }} {% trans "Вы можете оставить отклик на пост, кликнув по флажку" %} </h5>
 
 </table>
 {% else %}
