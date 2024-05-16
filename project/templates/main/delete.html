@@ -26,8 +26,12 @@
     </div>
 </table>
 
-
+{% if user.author == post_author %}
 <form method="POST">
     {% csrf_token %}
-    <input type="submit" value="Confirm"></form>
+    <input type="submit" value="Confirm">
+</form>
+{% else %}
+<h3>Вы не можете удалить этот пост<h3>
+{% endif %}
 {% endblock content %}
