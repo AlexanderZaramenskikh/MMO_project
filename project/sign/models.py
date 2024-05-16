@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 
 class BasicSignupForm(SignupForm):
 
+
     def save(self, request):
         user = super(BasicSignupForm, self).save(request)
         gamer_group = Group.objects.get(name='gamer')

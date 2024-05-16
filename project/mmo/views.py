@@ -23,9 +23,6 @@ class MainView(ListView):
         context['time_now'] = datetime.datetime.now()
         context['posts_quantity'] = len(Post.objects.all())
         return context
-    # def post(self, request):
-    #     request.session['django_timezone'] = request.POST['timezone']
-    #     return redirect('/news')
 
 
 class PostView(ListView):
@@ -40,7 +37,6 @@ class PostView(ListView):
         _id = self.kwargs.get('pk')
         context['time_now'] = datetime.datetime.utcnow()
         context['post'] = Post.objects.get(id=_id)
-        # context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
         return context
 
 
@@ -66,6 +62,7 @@ class PostCreateView(CreateView):
 
 class PostUpdateView(UpdateView):
     form_class = PostForm
+    model = Post
     template_name = 'main/create.html'
     success_url = '/'
 
@@ -77,8 +74,14 @@ class PostUpdateView(UpdateView):
 
 class PostDeleteView(DeleteView):
     template_name = 'main/delete.html'
+    model = Post
     queryset = Post.objects.all()
     success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post_author'] = Post.objects.get(pk=self.kwargs.get('pk')).author
+        return context
 
 
 def AboutView(request):
@@ -102,9 +105,11 @@ def Language(cur_language):
     else:
         return 'about_en.txt'
 
+
 class CommentView(CreateView):
     form_class = CommentForm
     model = Comment
     context_object_name = 'comment'
     template_name = 'main/comment.html'
     success_url = '/'
+
