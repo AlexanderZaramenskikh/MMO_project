@@ -6,10 +6,14 @@
 {% block content %}
 <div class="features">
     <h1> {{string}} {% trans "Новый отклик от " %}  "{{ user }}"</h1>
+    {% if user.is_authenticated %}
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Отправить отклик">
     </form>
+    {% else %}
+    <h3>Войдите в систему чтоб откликнуться<h3>
+    {% endif %}
 </div>
 {% endblock content %}

@@ -9,7 +9,10 @@ from django.views.generic import CreateView, DeleteView, UpdateView, ListView
 
 from .forms import PostForm,CommentForm
 from .models import Post,Comment
-
+from django.shortcuts import get_object_or_404,redirect
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from project.settings import DEFAULT_FROM_EMAIL
 
 class MainView(ListView):
     model = Post
@@ -63,13 +66,18 @@ class PostCreateView(CreateView):
 class PostUpdateView(UpdateView):
     form_class = PostForm
     model = Post
-    template_name = 'main/create.html'
+    template_name = 'main/update.html'
     success_url = '/'
 
 
     def get_object(self, **kwargs):
         _id = self.kwargs.get('pk')
         return Post.objects.get(pk=_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post_author'] = Post.objects.get(pk=self.kwargs.get('pk')).author
+        return context
 
 
 class PostDeleteView(DeleteView):
@@ -82,21 +90,6 @@ class PostDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['post_author'] = Post.objects.get(pk=self.kwargs.get('pk')).author
         return context
-
-
-def AboutView(request):
-    module_dir = os.path.dirname(__file__)
-    file_path = os.path.join(module_dir, 'static/main/txt/', Language(lg()))
-    my_file = open(file_path, 'r+', encoding="UTF-8")
-    txt = my_file.read()
-    my_file.close()
-
-    data = {
-        'page': _('О нас'),
-        'title': _('Мы очень крутые. Мы самые лучшие!!!!'),
-        'text': txt,
-    }
-    return render(request, 'main/about.html', data)
 
 
 def Language(cur_language):
@@ -113,3 +106,75 @@ class CommentView(CreateView):
     template_name = 'main/comment.html'
     success_url = '/'
 
+
+
+class AccountList(ListView):
+    model = Comment
+    template_name = 'main/account.html'
+    context_object_name = 'account'
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['accept'] = Comment.objects.filter(accept=False)
+        return context
+
+
+
+class CommentPk(ListView):
+    model = Comment
+    template_name = 'main/commentpk.html'
+    context_object_name = 'commentpk'
+
+    # ordering = '-post_time'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        _id = self.kwargs.get('pk')
+        context['commentpk'] = Comment.objects.get(id=_id)
+        return context
+
+
+    def form_valid(self, form):
+        resp = form.save(commit=False)
+        resp.user = self.request.user
+        resp.post = Comment.objects.get(id=self.kwargs['pk'])
+        resp.save()
+
+
+        send_mail(
+            subject=f'На Ваш пост откликнулся {resp.user.username}.',
+            message=resp.text,
+            from_email=DEFAULT_FROM_EMAIL,
+            recipient_list=[resp.post.user.email]
+        )
+
+        return super().form_valid(form)
+
+@login_required
+def accept_response(request, pk):
+    response = Comment.objects.get(id=pk)
+    response.accept = True
+    response.save()
+
+    send_mail(
+        subject=f' Ваш отклик был принят!',
+        message=response.text,
+        from_email=DEFAULT_FROM_EMAIL,
+        recipient_list=[response.user.email]
+    )
+
+    return redirect('account')
+
+
+@login_required
+def delete_response(request, pk):
+    response = Comment.objects.get(id=pk).delete()
+
+    send_mail(
+        subject=f' Ваш отклик был отклонен.',
+        message=response.text,
+        from_email=DEFAULT_FROM_EMAIL,
+        recipient_list=[response.user.email]
+    )
+    return redirect('account')
