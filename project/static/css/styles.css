@@ -1,0 +1,111 @@
+body {
+    background: #2c2c2c;
+}
+
+aside {
+    float: left;
+    #background: #36454F;
+    width: 18%;
+    padding: 1%;
+    height: 100vh;
+    color: #fff;
+    border-right: 5px solid #4d4d4d;
+}
+
+aside img {
+    wight: 80px;
+    float: left;
+    margin-bottom: 25px;
+    display: block;
+}
+img {
+    wight: 80px;
+    float: left;
+    margin-bottom: 25px;
+    display: block;
+}
+
+aside img:hover{transform: scale(1.05);}
+
+aside h3 {
+    margin-top: 120px;
+
+}
+
+aside ul {list-style: none}
+
+aside ul li {
+    display: block;
+    margin-top: 15px;
+    transition: all 0.6s ease;
+}
+
+aside ul li:hover, aside ul a:hover {
+    color: #fff;
+    text-decoration: none;
+    transform: scale(1.1);
+}
+
+main .features {
+    float: left;
+    color: #71797E;
+    margin-top: 10px;
+    wight: 75%;
+}
+
+main .features h1 {font-size: 35px; margin: 20px;}
+main .features p {max-wight: 600px; margin: 20px auto;}
+h1 {color: #B2BEB5; font-size: 35px; margin: 20px;}
+
+.text {
+    color: #B2BEB5;
+    float: left;
+    clear: both;
+    width: 800px;
+    margin: 20px 34%;
+    text-align: center;
+}
+
+accounts h1 {color: #71797E;}
+accounts .features {
+    float: left;
+    color: #71797E;
+    margin-top: 10px;
+    wight: 75%;
+    }
+
+main .alert-warning{
+    color: #B2BEB5;
+    float: left;
+    clear: both;
+    width: 400px;
+    margin: 20px 34%;
+    text-align: left;
+    }
+
+form {
+    margin: left;
+    wight: 500px;
+    margin-top: 50px;
+    }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    margin-left: 20px;
+    color: #b4b4b4;
+    background-color: #LightGray;
+    }
+
+table th {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    }
+
+table td {
+    border: 1px solid #ddd;
+    padding: 18px;
+    text-align: center;
+    }

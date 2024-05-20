@@ -1,0 +1,19 @@
+{% extends 'main/layout.html' %}{% load static %}
+{% load i18n %}
+
+{% block title %} Отклик от {{commentpk.user}} {% endblock title %}
+
+{% block content %}
+<div class="features">
+    <h1>{{ string }} {% trans "Просмотр отклика" %}</h1>
+    <h2> {{ string }} {% trans "Автор:" %} "{{commentpk.user}} " </h2>
+    <h2>{{ string }} {% trans "Отклик:" %} "{{ commentpk.text }}"</h2>
+    <h2>{{ string }} {% trans "На ваш пост:" %} "{{ commentpk.post }}"</h2>
+    {% if commentpk.accept == False %}
+    <h3 align="center"><a href="{% url 'accept_response' commentpk.id %}"><u> {{ string }} {% trans "Принять" %}
+        &#9989;</u></a></h3>
+    <h3 align="center"><a href="{% url 'delete_response' commentpk.id %}"><u> {{ string }} {% trans "Отказаться" %} &#9940; </u></a>
+    </h3>
+    {% endif %}
+</div>
+{% endblock content %}

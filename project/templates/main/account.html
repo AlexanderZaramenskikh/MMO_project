@@ -1,0 +1,26 @@
+{% extends 'main/layout.html' %}{% load static %}
+{% load i18n %}
+
+{% block title %} Аккаунт {% endblock title %}
+{% block content %}
+<div class="features">
+    <h3>Ваши отклики<h3>
+{% for comments in account %}
+        {% if comments.post == user.post %}
+<table>
+    <div class="table">
+    <tr>
+        <th> {{ string }} {% trans "Отклик:" %}</th>
+        <th> {{ string }} {% trans "От кого:" %}</th>
+        <th> {{ string }} {% trans "Статус:" %}</th>
+    </tr>
+    <tr>
+        <td width="200"><a href="{% url 'commentpk' comments.id %}">{{ comments.text|truncatechars:20 }}</a></td>
+        <td width="400">{{comments.user}}</td>
+        <td width="400">{{comments.accept}}</td>
+    </tr>
+    </div>
+</table>
+        {% endif %}
+{% endfor %}
+{% endblock content %}
